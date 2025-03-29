@@ -426,7 +426,7 @@ function loadNextCode() {
 }
 
 function startTimer() {
-    let timeLeft = 4;
+    let timeLeft = 25;
     document.getElementById("timer").innerText = `Code disappears in: ${timeLeft} sec`;
     codeHidden = false;
 
