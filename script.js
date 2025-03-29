@@ -33,9 +33,9 @@ function skipQuestion() {
         document.getElementById("game-container").innerHTML = `
     <div class="congratulations-screen">
         <h2>🎉 Congratulations, ${playerName}! 🎉</h2>
-        <h3>You fixed all the codes in ${formatTime(gameSecondsElapsed)}!</h3>
-        <h3>Final score: ${score} points</h3>
-        <h3>Tab switches: ${tabSwitchCount}</h3>
+        <h2>You fixed all the codes in ${formatTime(gameSecondsElapsed)}!</h2>
+        <h2>Final score: ${score} points</h2>
+        <h2>Tab switches: ${tabSwitchCount}</h2>
     </div>
 `;
         
@@ -195,7 +195,7 @@ const allCodeSnippets = {
         },
         {
             "buggy": "#include <stdio.h>\n\nvoid row_sums(int matrix[][3], int rows) {\n    for (int i = 0; i < rows; i++) {\n        int sum_row = 0;\n        for (int j = 0; j < 3; j++) {\n            sum_row += matrix[i][j];\n        }\n        printf(\"%d\\n\", sum);\n    }\n}\n\nint main() {\n    int matrix[3][3] = {{3, 1, 4}, {2, 7, 5}, {8, 6, 9}};\n    row_sums(matrix, 3);\n    return 0;\n}",
-            "correct": "printf(\"%d\\n\", sum_row);"
+            "correct": "printf(\"%d\", sum_row);"
         }
     ],
     java: [
@@ -403,9 +403,9 @@ function loadNextCode() {
         document.getElementById("game-container").innerHTML = `
             <div class="congratulations-screen">
                 <h2>🎉 Congratulations, ${playerName}! 🎉</h2>
-                <h3>You fixed all the codes in ${formatTime(gameSecondsElapsed)}!</h3>
-                <h3>Final score: ${score} points</h3>
-                <h3>Tab switches: ${tabSwitchCount}</h3>
+                <h2>You fixed all the codes in ${formatTime(gameSecondsElapsed)}!</h2>
+                <h2>Final score: ${score} points</h2>
+                <h2>Tab switches: ${tabSwitchCount}</h2>
             </div>
         `;
         exitFullscreen();
@@ -426,7 +426,7 @@ function loadNextCode() {
 }
 
 function startTimer() {
-    let timeLeft = 25;
+    let timeLeft = 4;
     document.getElementById("timer").innerText = `Code disappears in: ${timeLeft} sec`;
     codeHidden = false;
 
@@ -505,13 +505,13 @@ function getCodeOutput(language, code, isCorrect = false) {
     const mockOutputs = {
         python: {
             correct: {
-                "insertion_sort": "4 8 3 7 1\n\n3 4 8 7 1\n\n3 4 7 8 1\n\n1 3 4 7 8",
+                "insertion_sort": "4 8 3 7 1<br>3 4 8 7 1<br>3 4 7 8 1<br>1 3 4 7 8",
                 "find_max": "9",
                 "is_armstrong": "True",
                 "find_duplicate": "3",
                 "column_sums": "[13, 14, 18]",
                 "bubble_sort": "[11, 12, 22, 25, 34, 64, 90]",
-                "decimal_to_binary": "101\n1000\n1111",
+                "decimal_to_binary": "101<br>1000<br>1111",
                 "reverse_number": "321",
                 "binary_search": "4",
                 "matrix_multiply": "[[114, 160, 60, 27], [74, 97, 73, 14], [119, 157, 112, 23]]",
@@ -520,34 +520,32 @@ function getCodeOutput(language, code, isCorrect = false) {
         },
         c: {
             correct: {
-                "insertionSort": "4 8 3 7 1\n\n3 4 8 7 1\n\n3 4 7 8 1\n\n1 3 4 7 8",
+                "insertionSort": "4 8 3 7 1<br>3 4 8 7 1<br>3 4 7 8 1<br>1 3 4 7 8",
                 "find_max": "9",
-                "is_armstrong": "1",
+                "is_armstrong": "True",
                 "find_duplicate": "3",
                 "column_sums": "13 14 18",
                 "bubble_sort": "11, 12, 22, 25, 34, 64, 90",
-                "decimal_to_binary": "101\n1000\n1111",
+                "decimal_to_binary": "101<br>1000<br>1111",
                 "reverse_number": "321",
                 "binary_search": "4",
-                "matrix_multiply": "114 160 60 27\n74 97 73 14\n119 157 112 23",
-                "row_sums": "8\n14\n23"
-                
+                "matrix_multiply": "114 160 60 27<br>74 97 73 14<br>119 157 112 23",
+                "row_sums": "8<br>14<br>23"
             }
         },
         java: {
             correct: {
-                "insertionSort": "4 8 3 7 1\n\n3 4 8 7 1\n\n3 4 7 8 1\n\n1 3 4 7 8",
+                "insertionSort": "4 8 3 7 1<br>3 4 8 7 1<br>3 4 7 8 1<br>1 3 4 7 8",
                 "findMax": "9",
                 "isArmstrong": "true",
                 "findDuplicate": "3",
                 "columnSums": "[13, 14, 18]",
                 "bubbleSort": "[11, 12, 22, 25, 34, 64, 90]",
-                "decimalToBinary": "101\n1000\n1111",
+                "decimalToBinary": "101<br>1000<br>1111",
                 "reverseNumber": "321",
                 "binarySearch": "4",
                 "matrixMultiply": "[[114, 160, 60, 27], [74, 97, 73, 14], [119, 157, 112, 23]]",
                 "rowSums": "[8, 14, 23]"
-                
             }
         }
     };
@@ -556,6 +554,11 @@ function getCodeOutput(language, code, isCorrect = false) {
     const funcMatch = code.match(/def\s+(\w+)|int\s+(\w+)|boolean\s+(\w+)|void\s+(\w+)/);
     const funcName = funcMatch ? (funcMatch[1] || funcMatch[2] || funcMatch[3] || funcMatch[4]) : "";
     
+    // Special case for Java's decimalToBinary method
+    if (language === "java" && code.includes("decimalToBinary")) {
+        return "101\n1000\n1111";
+    }
+    
     // Always try to return the expected output, regardless of isCorrect
     if (mockOutputs[language] && mockOutputs[language].correct && funcName) {
         return mockOutputs[language].correct[funcName] || "Output not available";
@@ -563,7 +566,6 @@ function getCodeOutput(language, code, isCorrect = false) {
     
     return "Output not available";
 }
-
 function revealCode() {
     let revealBtn = document.getElementById("reveal-btn");
     let currentReveals = parseInt(revealBtn.innerText.match(/\((\d+) left\)/)[1]);
@@ -638,15 +640,13 @@ function skipQuestion() {
         createConfettiBurst();
         
         document.getElementById("game-container").innerHTML = `
-            <div class="congratulations-screen">
-                <div class="dancing-character"></div>
-                <h2>🎉 Congratulations, ${playerName}! 🎉</h2>
-                <h3>You fixed all the codes in ${formatTime(gameSecondsElapsed)}!</h3>
-                <h3>Final score: ${score} points</h3>
-                <h3>Tab switches: ${tabSwitchCount}</h3>
-            </div>
-        `;
-        
+    <div class="congratulations-screen">
+        <h2 class="glitch pop-effect" data-text="🎉 CONGRATULATIONS, ${playerName}! 🎉">🎉 CONGRATULATIONS, ${playerName}! 🎉</h2>
+        <h2>You fixed all the codes in ${formatTime(gameSecondsElapsed)}!</h2>
+        <h2>Final score: ${score} points</h2>
+        <h2>Tab switches: ${tabSwitchCount}</h2>
+    </div>
+`;
         // Add floating balloons
         createBalloons();
         
@@ -923,3 +923,20 @@ function clearClipboard() {
 
 // Call this when game starts
 clearClipboard();
+// Add this to the skipQuestion function after creating the congratulations screen
+const glitchText = document.querySelector('.glitch');
+setInterval(() => {
+    // Randomly toggle glitch effect
+    if (Math.random() > 0.7) {
+        glitchText.style.animation = 'none';
+        setTimeout(() => {
+            glitchText.style.animation = 'glitch-skew 1s infinite linear alternate-reverse';
+        }, 100);
+    }
+    
+    // Random color changes
+    if (Math.random() > 0.8) {
+        const hue = Math.floor(Math.random() * 360);
+        glitchText.style.color = `hsl(${hue}, 100%, 70%)`;
+    }
+}, 2000);
